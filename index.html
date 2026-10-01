@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Projeto ISO 9001 — Qualidade de Software</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{--paper:#ECE7DA;--card:#FBF9F3;--ink:#22303F;--soft:#55606B;--line:#C9C0AC;--field:#fff;--plan:#3E7CA6;--do:#4C8C6B;--check:#D98E3C;--act:#B23A26;--ok:#3F7457;--warn:#92600E;--flag:#B23A26;--idle:#EFEAD9;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#1B2430;--card:#243141;--ink:#E7E2D4;--soft:#A5AFBA;--line:#3B4A5D;--field:#1B2430;--idle:#2C3A4C;--ok:#7CC49C;--warn:#E0B25A;--flag:#F08A76}}
+:root[data-theme="dark"]{--paper:#1B2430;--card:#243141;--ink:#E7E2D4;--soft:#A5AFBA;--line:#3B4A5D;--field:#1B2430;--idle:#2C3A4C;--ok:#7CC49C;--warn:#E0B25A;--flag:#F08A76}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;padding:28px 16px 60px}
+.wrap{max-width:1180px;margin:0 auto}
+header{text-align:center;margin-bottom:22px}
+h1{font-family:'Fraunces',Georgia,serif;font-size:clamp(26px,4vw,42px);margin:0 0 8px}
+header p{color:var(--soft);max-width:700px;margin:0 auto;line-height:1.5;font-size:15px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:16px 20px;margin:0 auto 22px;max-width:860px;font-size:14px;line-height:1.55}
+.brief b{font-family:'Fraunces',Georgia,serif;font-size:17px}
+.brief ol{margin:8px 0 0;padding-left:20px}
+.legend{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:22px;font:11px 'JetBrains Mono',monospace}
+.legend span{padding:4px 9px;border-radius:3px;color:#fff}
+.id-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:22px}
+.id-field{display:flex;flex-direction:column;gap:4px}
+.id-field label{font:11px 'JetBrains Mono',monospace;color:var(--soft)}
+input{font:14px inherit;padding:9px 12px;border:1px solid var(--line);border-radius:3px;background:var(--field);color:var(--ink);width:250px;max-width:100%}
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:940px){.board{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.board{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-top:6px solid var(--a);border-radius:4px;padding:16px}
+.card[data-g=plan]{--a:var(--plan)}.card[data-g=do]{--a:var(--do)}.card[data-g=check]{--a:var(--check)}.card[data-g=act]{--a:var(--act)}
+.head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.head h2{font-family:'Fraunces',Georgia,serif;font-size:18px;margin:0}
+.num{font:600 11px 'JetBrains Mono',monospace;color:var(--a)}
+.task{font-size:12.5px;color:var(--soft);line-height:1.45;margin:8px 0 10px}
+.badge{font:10.5px 'JetBrains Mono',monospace;padding:4px 8px;border-radius:3px;white-space:nowrap;border:1px solid var(--line);background:var(--idle);color:var(--soft)}
+.badge.ok{color:var(--ok)}.badge.warn{color:var(--warn)}.badge.flag{color:var(--flag)}
+textarea{width:100%;min-height:170px;resize:vertical;border:1px solid var(--line);border-radius:3px;padding:10px;font:14px/1.55 inherit;color:var(--ink);background:var(--field)}
+textarea:focus,input:focus{outline:2px solid var(--a,var(--plan));outline-offset:1px}
+.meter{height:5px;background:var(--idle);border-radius:3px;overflow:hidden;margin-top:6px}
+.fill{height:100%;width:0;background:var(--ok);transition:width .25s}
+.stats{display:flex;justify-content:space-between;margin-top:6px;font:10.5px 'JetBrains Mono',monospace;color:var(--soft)}
+.actions{display:flex;justify-content:center;gap:12px;margin-top:28px;flex-wrap:wrap;align-items:center}
+button{font:13px 'JetBrains Mono',monospace;padding:12px 22px;border-radius:4px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);cursor:pointer}
+button.sec{background:transparent;color:var(--ink);border-color:var(--line)}
+#prog{font:12px 'JetBrains Mono',monospace;color:var(--soft)}
+.report,.panel{display:none;margin-top:28px;background:var(--card);border:1px solid var(--line);border-radius:4px;padding:20px}
+.show{display:block}
+h3{font-family:'Fraunces',Georgia,serif;margin:0 0 12px}
+.row{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:8px 0;border-top:1px dashed var(--line);font-size:13px}
+.row:first-of-type{border-top:0}
+.det{font:11px 'JetBrains Mono',monospace;color:var(--soft)}
+.note{margin-top:14px;font-size:12.5px;color:var(--soft);line-height:1.5;border-top:1px solid var(--line);padding-top:12px}
+.flags{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Projeto ISO 9001:2015 para Software</h1>
+  <p>Disciplina de Qualidade de Software. Para cada seção da ABNT NBR ISO 9001:2015, proponha soluções, práticas e artefatos gerais que uma organização de software poderia adotar para atender aos requisitos. Escreva com suas próprias palavras: o sistema sinaliza trechos colados e, ao enviar, gera um PDF protegido com código de verificação, envie esse PDF no SIGAA.</p>
+</header>
+
+<div class="brief">
+  <b>Como funciona o projeto</b>
+  <ol>
+    <li>Leia a seção correspondente da norma e a tarefa descrita em cada quadro.</li>
+    <li>Escreva possíveis soluções gerais para atender aos requisitos, valendo para qualquer empresa de software (processos, artefatos, ferramentas, métricas, responsáveis).</li>
+    <li>Sempre que possível, cite o número da subseção (ex.: 8.3.4) e a evidência que um auditor pediria.</li>
+    <li>Cores dos quadros seguem o ciclo PDCA: azul = Planejar (0–7), verde = Fazer (8), laranja = Verificar (9), vermelho = Agir (10).</li>
+  </ol>
+</div>
+
+<div class="legend"><span style="background:var(--plan)">P — Planejar</span><span style="background:var(--do)">D — Fazer</span><span style="background:var(--check)">C — Verificar</span><span style="background:var(--act)">A — Agir</span></div>
+
+<div class="id-row">
+  <div class="id-field"><label for="nome">NOME DO ALUNO</label><input id="nome" placeholder="Seu nome completo"></div>
+  <div class="id-field"><label for="turma">TURMA</label><input id="turma" placeholder="Ex.: BSI/LCI"></div>
+</div>
+
+<div class="board" id="board"></div>
+
+<div class="actions">
+  <span id="prog">0/11 quadros preenchidos</span>
+  <button id="submitBtn">Enviar respostas</button>
+  <button class="sec" id="clearBtn">Limpar</button>
+</div>
+
+<div class="report" id="report"><h3>Relatório de envio</h3><div id="reportBody"></div>
+  <div class="note">O relatório mede a proporção de caracteres inseridos por colagem (Ctrl+V) em relação ao total de cada campo. Percentual alto não prova cópia, mas é um indício para o professor conversar com o aluno e comparar com a fonte.</div></div>
+
+<div style="text-align:center;margin-top:36px"><button class="sec" id="togglePanel" style="display:none">Painel do professor</button></div>
+<div class="panel" id="panel">
+  <h3>Respostas enviadas por todos os alunos</h3>
+  <p class="note" style="margin-top:0;border:0;padding:0">Os envios ficam salvos de forma compartilhada; quem abrir este link autenticado pode ver a lista.</p>
+  <div style="margin:16px 0">
+    <label class="det" for="verifyInput">VERIFICAR CÓDIGO DO PDF RECEBIDO</label>
+    <div style="display:flex;gap:8px;margin-top:5px;flex-wrap:wrap"><input id="verifyInput" placeholder="Ex.: A1B2-C3D4-E5F6-0000" style="flex:1;min-width:200px"><button class="sec" id="verifyBtn">Verificar</button></div>
+    <div id="verifyResult" style="margin-top:10px;font-size:13px"></div>
+  </div>
+  <div id="panelBody"><p class="det">Nenhum envio registrado ainda.</p></div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const S=[
+{id:"s0",n:"0",g:"plan",t:"Introdução",sub:"Princípios, processos, PDCA e risco",q:"Cite os 7 princípios de gestão da qualidade e explique abordagem de processo, ciclo PDCA e mentalidade de risco. Proponha como o PDCA pode ser incorporado a um ciclo de desenvolvimento de software (ex.: uma sprint)."},
+{id:"s1",n:"1–3",g:"plan",t:"Escopo, referência e termos",sub:"Para que serve a norma",q:"Explique o objetivo da norma e por que ela se aplica a empresas de software. Defina, com exemplos de software, 3 termos da seção 3 (ex.: não conformidade, informação documentada, ação corretiva)."},
+{id:"s4",n:"4",g:"plan",t:"Contexto da organização",sub:"Partes interessadas, escopo e processos",q:"Proponha uma forma de a organização identificar questões internas e externas e partes interessadas (4.1–4.2), de documentar o escopo do SGQ (4.3) e de mapear processos com entradas, saídas e indicadores (4.4)."},
+{id:"s5",n:"5",g:"plan",t:"Liderança",sub:"Comprometimento, política e papéis",q:"Proponha ações para a alta direção demonstrar liderança e foco no cliente (5.1). Sugira um modelo de política da qualidade para software (5.2) e papéis e autoridades típicos, como PO, QA e tech lead (5.3)."},
+{id:"s6",n:"6",g:"plan",t:"Planejamento",sub:"Riscos, objetivos e mudanças",q:"Proponha um método para identificar e tratar riscos e oportunidades (6.1), com exemplos comuns em software. Sugira objetivos da qualidade mensuráveis (6.2), como densidade de defeitos ou cobertura de testes, e um procedimento para planejar mudanças (6.3)."},
+{id:"s7",n:"7",g:"plan",t:"Apoio",sub:"Recursos, competência e documentação",q:"Proponha soluções para recursos, infraestrutura e ambiente (7.1), como ferramentas de teste e CI, e para competência, conscientização e comunicação (7.2–7.4). Sugira que informações documentadas manter e como controlar versões e acessos (7.5)."},
+{id:"s8a",n:"8.1–8.2",g:"do",t:"Operação: requisitos",sub:"Planejamento operacional e requisitos",q:"Proponha como planejar e controlar a operação (8.1). Sugira práticas para comunicação com o cliente, levantamento, análise crítica e controle de mudanças nos requisitos (8.2), como backlog, critérios de aceite e gestão de mudanças."},
+{id:"s8b",n:"8.3",g:"do",t:"Operação: projeto e desenvolvimento",sub:"Da entrada à saída do projeto",q:"Proponha um fluxo que cubra as etapas de 8.3 (planejamento, entradas, controles, saídas e mudanças) no ciclo de vida do software. Indique onde entram revisões, verificação, validação e testes e quais registros guardar."},
+{id:"s8c",n:"8.4–8.5",g:"do",t:"Operação: externos e produção",sub:"Provedores, produção e pós-entrega",q:"Proponha critérios para selecionar e monitorar provedores externos (8.4), como bibliotecas, nuvem e terceirização. Sugira controles para produção e provisão do serviço, rastreabilidade, preservação, pós-entrega e mudanças (8.5): deploy, versionamento, suporte e patches."},
+{id:"s8d",n:"8.6–8.7",g:"do",t:"Operação: liberação e não conformes",sub:"Critérios de liberação e tratamento de falhas",q:"Proponha critérios de liberação de uma versão (8.6), como testes aprovados e revisão de código. Sugira um procedimento para identificar, conter, corrigir e registrar saídas não conformes, como bugs e incidentes (8.7)."},
+{id:"s9",n:"9",g:"check",t:"Avaliação de desempenho",sub:"Medição, auditoria e análise crítica",q:"Proponha indicadores e métodos de medição, incluindo satisfação do cliente (9.1). Sugira um programa de auditoria interna com critérios, escopo e evidências (9.2) e uma pauta de análise crítica pela direção com entradas e saídas (9.3)."},
+{id:"s10",n:"10",g:"act",t:"Melhoria",sub:"Não conformidade e melhoria contínua",q:"Proponha um procedimento para tratar não conformidades: reação, análise de causa (ex.: 5 porquês), ação corretiva, verificação de eficácia e registro (10.2). Explique como isso sustenta a melhoria contínua (10.1, 10.3)."}
+];
+const st={};
+const board=document.getElementById("board");
+S.forEach(s=>{
+  st[s.id]={typed:0,pasted:0};
+  board.insertAdjacentHTML("beforeend",`<div class="card" data-g="${s.g}"><div class="head"><div><span class="num">SEÇÃO ${s.n}</span><h2>${s.t}</h2></div><span class="badge" data-b="${s.id}">aguardando</span></div><div class="task"><b>${s.sub}.</b> ${s.q}</div><textarea data-f="${s.id}" placeholder="Descreva possíveis soluções gerais para esta seção..."></textarea><div class="meter"><div class="fill" data-m="${s.id}"></div></div><div class="stats"><span data-c="${s.id}">0 caracteres</span><span data-p="${s.id}">0% colado</span></div></div>`);
+});
+const ids=S.map(s=>s.id);
+function classify(p,total){if(!total)return{c:"",l:"vazio"};if(p<20)return{c:"ok",l:"digitado"};if(p<60)return{c:"warn",l:"parcialmente colado"};return{c:"flag",l:"colado (Ctrl+V)"}}
+const pctOf=f=>{const s=st[f],t=s.typed+s.pasted;return t?Math.round(s.pasted/t*100):0};
+function ui(f){
+  const s=st[f],t=s.typed+s.pasted,p=pctOf(f),i=classify(p,t);
+  const b=document.querySelector(`[data-b="${f}"]`);b.className="badge "+i.c;b.textContent=i.l;
+  document.querySelector(`[data-c="${f}"]`).textContent=t+" caracteres";
+  document.querySelector(`[data-p="${f}"]`).textContent=p+"% colado";
+  const m=document.querySelector(`[data-m="${f}"]`);m.style.width=p+"%";m.style.background=p<20?"var(--ok)":p<60?"var(--warn)":"var(--flag)";
+  const n=ids.filter(x=>document.querySelector(`[data-f="${x}"]`).value.trim().length>0).length;
+  document.getElementById("prog").textContent=n+"/"+ids.length+" quadros preenchidos";
+}
+ids.forEach(f=>{
+  const ta=document.querySelector(`[data-f="${f}"]`);let last="";
+  ta.addEventListener("paste",e=>{st[f].pasted+=((e.clipboardData||window.clipboardData).getData("text")||"").length;ui(f)});
+  ta.addEventListener("input",e=>{
+    if(!ta.value.length){st[f]={typed:0,pasted:0};last="";ui(f);return}
+    if(e.inputType==="insertText"){st[f].typed+=e.data?e.data.length:Math.max(0,ta.value.length-last.length)}
+    else if(e.inputType==="insertLineBreak"){st[f].typed+=1}
+    last=ta.value;ui(f);
+  });
+});
+document.getElementById("clearBtn").onclick=()=>{
+  ids.forEach(f=>{document.querySelector(`[data-f="${f}"]`).value="";st[f]={typed:0,pasted:0};ui(f)});
+  ["nome","turma"].forEach(i=>document.getElementById(i).value="");
+  document.getElementById("report").classList.remove("show");
+};
+const esc=s=>{const d=document.createElement("div");d.textContent=s;return d.innerHTML};
+const title=f=>S.find(s=>s.id===f);
+async function getDb(){try{return window.claude?await claude.use("db"):null}catch(e){return null}}
+async function genCode(str){
+  const h=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,"0")).join("").toUpperCase().slice(0,16).match(/.{1,4}/g).join("-");
+}
+const OWNER_PWD="951753";
+async function buildPdf(r){
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({unit:"pt",format:"a4",encryption:{userPassword:"",ownerPassword:OWNER_PWD,userPermissions:["print"]}});
+  const mx=50,W=doc.internal.pageSize.getWidth(),H=doc.internal.pageSize.getHeight(),mw=W-mx*2;let y=60;
+  const need=n=>{if(y+n>H-50){doc.addPage();y=60}};
+  doc.setFont("times","bold");doc.setFontSize(19);doc.text("Projeto ISO 9001:2015 — Qualidade de Software",mx,y);y+=26;
+  doc.setFont("helvetica","normal");doc.setFontSize(11);doc.setTextColor(30);
+  doc.text(`Aluno: ${r.nome}    Turma: ${r.turma||"—"}`,mx,y);y+=16;
+  doc.text(`Enviado em: ${new Date(r.when).toLocaleString("pt-BR")}`,mx,y);y+=14;
+  doc.setDrawColor(180);doc.line(mx,y,W-mx,y);y+=20;
+  ids.forEach(f=>{
+    const s=title(f);need(44);
+    doc.setFont("times","bold");doc.setFontSize(13);doc.setTextColor(30);doc.text(`Seção ${s.n} — ${s.t}`,mx,y);y+=15;
+    const t=(r.answers[f]||"").trim(),i=classify(r.pct[f],t.length);
+    doc.setFont("courier","normal");doc.setFontSize(9);doc.setTextColor(120);doc.text(`Indicador de digitação: ${i.l} — ${r.pct[f]}% colado`,mx,y);y+=15;
+    doc.setFont("helvetica","normal");doc.setFontSize(11);doc.setTextColor(30);
+    doc.splitTextToSize(t||"(Não respondido.)",mw).forEach(l=>{need(15);doc.text(l,mx,y);y+=15});
+    y+=12;
+  });
+  need(70);doc.setDrawColor(180);doc.line(mx,y,W-mx,y);y+=18;
+  doc.setFont("courier","normal");doc.setFontSize(8.5);doc.setTextColor(130);
+  ["Documento gerado automaticamente pelo Projeto ISO 9001 — Qualidade de Software.",`Código de verificação: ${r.code}`,"Este PDF é protegido: copiar ou editar sem a senha do professor não é permitido pelos leitores compatíveis.","Para conferir se o conteúdo foi alterado após o envio, use \"Verificar código\" no painel do professor e compare com o texto salvo."].forEach(p=>{
+    doc.splitTextToSize(p,mw).forEach(l=>{need(11);doc.text(l,mx,y);y+=11});y+=4;
+  });
+  const fname=`iso9001_${(r.nome||"aluno").trim().replace(/\s+/g,"_")}.pdf`;
+  let saved=false;
+  try{const dl=window.claude?await claude.use("downloads"):null;
+    if(dl){await dl.save({filename:fname,data:doc.output("arraybuffer")});saved=true}}catch(e){}
+  if(!saved)doc.save(fname);
+}
+document.getElementById("submitBtn").onclick=async()=>{
+  const nome=nome_.value.trim(),turma=turma_.value.trim();
+  const pct={},rows=[],answers={};let empty=true;
+  ids.forEach(f=>{
+    answers[f]=document.querySelector(`[data-f="${f}"]`).value;
+    const t=st[f].typed+st[f].pasted,p=pctOf(f);pct[f]=p;if(t)empty=false;
+    const i=classify(p,t);
+    rows.push(`<div class="row"><b>${title(f).n} — ${title(f).t}</b><span class="det">${t} caracteres · ${p}% colado</span><span class="badge ${i.c}">${i.l}</span></div>`);
+  });
+  if(!nome){alert("Preencha o nome do aluno antes de enviar.");return}
+  if(empty){alert("Preencha ao menos um dos quadros antes de enviar.");return}
+  const when=new Date().toISOString();
+  const code=await genCode([nome,turma,when,...ids.map(f=>answers[f])].join("|"));
+  const rec={nome,turma,pct,when,answers,code};
+  rows.push(`<div class="row"><b>Código de verificação</b><span class="det" style="font-size:13px">${code}</span></div>`);
+  reportBody.innerHTML=rows.join("");report.classList.add("show");
+  const db=await getDb();
+  if(db){try{await db.collection("envios").doc(code).set(rec)}catch(e){console.error(e)}}
+  await buildPdf(rec);
+};
+const nome_=document.getElementById("nome"),turma_=document.getElementById("turma");
+const reportBody=document.getElementById("reportBody"),report=document.getElementById("report");
+
+// painel do professor: abra o link com #professor no final
+if(location.hash==="#professor")document.getElementById("togglePanel").style.display="inline-block";
+document.getElementById("togglePanel").onclick=async()=>{
+  const p=document.getElementById("panel");p.classList.toggle("show");
+  if(!p.classList.contains("show"))return;
+  const body=document.getElementById("panelBody"),db=await getDb();
+  if(!db){body.innerHTML='<p class="det">Faça login no claude.ai para ver os envios.</p>';return}
+  try{
+    const snap=await db.collection("envios").get();
+    const list=snap.docs.map(d=>d.data()).filter(Boolean).sort((a,b)=>new Date(b.when)-new Date(a.when));
+    if(!list.length){body.innerHTML='<p class="det">Nenhum envio registrado ainda.</p>';return}
+    body.innerHTML=list.map(e=>`<div class="row" style="display:block"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px"><b>${esc(e.nome||"Sem nome")} — ${esc(e.turma||"sem turma")}</b><span class="det">${new Date(e.when).toLocaleString("pt-BR")}</span></div><div class="flags">${ids.map(f=>{const p=(e.pct||{})[f]||0;return `<span class="badge ${classify(p,1).c}">${title(f).n}: ${p}%</span>`}).join("")}<span class="badge">código: ${esc(e.code||"—")}</span></div></div>`).join("");
+  }catch(e){body.innerHTML='<p class="det">Não foi possível carregar os envios agora.</p>'}
+};
+document.getElementById("verifyBtn").onclick=async()=>{
+  const out=document.getElementById("verifyResult"),code=verifyInput.value.trim().toUpperCase();
+  if(!code){out.innerHTML="";return}
+  out.textContent="Verificando...";
+  const db=await getDb(),bad='<span class="badge flag">código não encontrado</span> — nenhum envio com esse código foi registrado.';
+  try{
+    const d=db&&await db.collection("envios").doc(code).get();
+    if(d&&d.exists){
+      const e=d.data();
+      out.innerHTML=`<span class="badge ok">código autêntico</span> — envio de <b>${esc(e.nome)}</b> (${esc(e.turma||"sem turma")}), em ${new Date(e.when).toLocaleString("pt-BR")}.<div class="note">Compare o texto abaixo com o PDF entregue. Qualquer diferença indica alteração após o envio.</div>`+ids.map(f=>`<div style="margin-top:10px;border-top:1px dashed var(--line);padding-top:8px"><div class="det">${title(f).n} — ${title(f).t}</div><div style="white-space:pre-wrap;font-size:13px">${esc((e.answers||{})[f]||"(em branco)")}</div></div>`).join("");
+    }else out.innerHTML=bad;
+  }catch(e){out.innerHTML=bad}
+};
+const verifyInput=document.getElementById("verifyInput");
+</script>
+</body>
+</html>
